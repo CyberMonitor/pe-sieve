@@ -84,8 +84,8 @@ protected:
 
 class MemPageScanner {
 public:
-	MemPageScanner(HANDLE _procHndl, MemPageData &_memPageDatal)
-		: processHandle(_procHndl), memPage(_memPageDatal),
+	MemPageScanner(HANDLE _procHndl, MemPageData &_memPageDatal, bool detect_shellcode)
+		: processHandle(_procHndl), memPage(_memPageDatal), detectShellcode(detect_shellcode),
 		isDeepScan(true)
 	{
 	}
@@ -98,7 +98,10 @@ public:
 protected:
 	ULONGLONG findPeHeader(MemPageData &memPageData);
 
+	bool isShellcode(MemPageData &memPageData);
+
 	bool isDeepScan;
+	bool detectShellcode; // is shellcode detection enabled
 	HANDLE processHandle;
 	MemPageData &memPage;
 };
