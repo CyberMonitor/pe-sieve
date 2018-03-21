@@ -22,6 +22,7 @@
 #define PARAM_VERSION  "/version"
 #define PARAM_QUIET "/quiet"
 #define PARAM_JSON "/json"
+#define PARAM_SHELLCODE "/shellc"
 
 void print_in_color(int color, std::string text)
 {
@@ -43,13 +44,17 @@ void print_help()
 
 	print_in_color(hdr_color, "\nOptional: \n");
 	print_in_color(param_color, PARAM_IMP_REC);
-	std::cout << "\t: Enable recovering imports. ";
-	std::cout << "(Warning: it may slow down the scan)\n";
+	std::cout << "\t: Enable recovering imports.\n";
+
+	print_in_color(param_color, PARAM_SHELLCODE);
+	std::cout << "\t: Detect shellcode implants.\n";
+
 #ifdef _WIN64
 	print_in_color(param_color, PARAM_MODULES_FILTER);
 	std::cout << " <*mfilter_id>\n\t: Filter the scanned modules.\n";
 	std::cout << "*mfilter_id:\n\t0 - no filter\n\t1 - 32bit\n\t2 - 64bit\n\t3 - all (default)\n";
 #endif
+
 	print_in_color(param_color, PARAM_OUT_FILTER);
 	std::cout << " <*ofilter_id>\n\t: Filter the dumped output.\n";
 	std::cout << "*ofilter_id:\n\t0 - no filter: dump everything (default)\n\t1 - don't dump the modified PEs, but file the report\n\t2 - don't create the output directory at all\n";
@@ -120,6 +125,9 @@ int main(int argc, char *argv[])
 		}
 		else if (!strcmp(argv[i], PARAM_IMP_REC)) {
 			args.imp_rec = true;
+		}
+		else if (!strcmp(argv[i], PARAM_SHELLCODE)) {
+			args.shellcode = true;
 		}
 		else if (!strcmp(argv[i], PARAM_OUT_FILTER)) {
 			args.out_filter = static_cast<t_output_filter>(atoi(argv[i + 1]));
